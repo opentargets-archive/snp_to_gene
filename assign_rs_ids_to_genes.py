@@ -3,12 +3,30 @@ from process_vep import ProcessVep
 from nearest_gene_five_prime import NearestGeneFivePrime
 import os
 
+'''
+Performs gene assignments by combining output from the Ensembl REST API VEP output with
+that of the Perl Ensembl API.
+The gene assignment uses the VEP output if the VEP has a "most_severe_consequence" that is
+not "intergenic_variant". All intergenic variants and variants that produced no VEP output
+are assigned genes using the Ensembl Perl "fetch_all_by_outward_search()" method.
+Some rs IDs in the input list may not exist in Ensembl so will not be assigned to genes.
+Other rs IDs may be to far from any gene to be assigned, that is > "-MAX_RANGE => 500000"
+from any gene.
+
+Usage: Create an instance passing in a list of rs IDs to assign and an assembly name (e.g. GRCh38).
+Then call its "get_gene_assignments()" method to get a list of lists containing rs IDs, ensembl
+gene ID, SO term and distance from gene (0 for intra-genic rs IDs).
+'''
 class AssignRsIDsToGenes():
     def __init__(self, rs_ids, assembly_name):
+        '''
+        Initialise with a list of rs IDs and an assembly name.
+        '''
         self.rs_ids = rs_ids
         self.assembly_name = assembly_name
         self.vep_gene_assignments = self._set_vep_gene_assignments()
         self.nearest_gene_five_prime = self._set_nearest_five_prime()
+        self.gene_assignments = self._set_gene_assignments()
     def _set_vep_gene_assignments(self):
         '''
         Loop over all the rs IDs and for each one, create an RsIdVep instance.
@@ -44,7 +62,8 @@ class AssignRsIDsToGenes():
         return self.vep_gene_assignments
     def get_rs_ids_with_no_vep_genes(self):
         '''
-        
+        Return a list of rs IDs that have not produced any VEP output or that have the
+        SO term "intergenic_variant". This list provides the input for "_set_nearest_five_prime()".
         '''
         vep_rs_ids = [vep_gene_assignment['rs_id'] for vep_gene_assignment in self.vep_gene_assignments]
         rs_ids_with_no_vep_genes = list(set(self.rs_ids) - set(vep_rs_ids))
@@ -56,7 +75,11 @@ class AssignRsIDsToGenes():
 
     def _set_nearest_five_prime(self):
         '''
-        
+        Process all rs IDs that have no VEP output or that have the SO
+        term "intergenic_variant".
+        Creates a temp file that provides a list of rs IDs to the Perl
+        Ensembl API code managed by "NearestGeneFivePrime". Would prefer to use
+        the Python "tempfile" module but cannot pass this to the Perl script.
         '''
         rs_ids_with_no_vep_genes = self.get_rs_ids_with_no_vep_genes()
         temp_file = 'rs_ids.txt'
@@ -69,12 +92,13 @@ class AssignRsIDsToGenes():
         self.nearest_five_prime = nearest_gene_map
     def get_nearest_five_prime(self):
         '''
-        
+        Return an instance variable.
         '''
         return self.nearest_five_prime
-    def get_gene_assignments(self):
+    def _set_gene_assignments(self):
         '''
-        Produce the final gene assignments as a list of lists.
+        Set an instance variable containing the final gene assignments as a
+        list of lists.
         '''
         gene_assignments = []
         for vep_gene_assignment in self.vep_gene_assignments:
@@ -91,6 +115,12 @@ class AssignRsIDsToGenes():
             distance = gene_info['distance']
             gene_assignments.append([rs_id, so_term, gene, distance])
         return gene_assignments
+    
+    def get_gene_assignments(self):
+        '''
+        Return an instance variable.
+        '''
+        return self.gene_assignments
 if __name__ == '__main__':
     rs_id_file = 'test_data/rs_id_list.txt'
     rs_ids = open(rs_id_file, 'rt').read().split('\n')
