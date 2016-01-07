@@ -67,9 +67,10 @@ class NearestGeneFivePrime():
         return nearest_gene_map
         
 if __name__ == '__main__':
-    rs_id_file = 'test_data/rs_id_list.txt'
+    rs_id_file = './test_data/rs_id_list.txt'
     nearest_gene_5p = NearestGeneFivePrime(rs_id_file)
     perl_json = nearest_gene_5p.get_perl_output_as_json()
+    print perl_json
     print json.dumps(perl_json['rs1000113'])
     print json.dumps(nearest_gene_5p.get_gene_map_for_rank('rs1000113', 0))
     print json.dumps(nearest_gene_5p.get_gene_map_for_rank('rs1000113', 1))
