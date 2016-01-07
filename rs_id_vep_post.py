@@ -76,11 +76,11 @@ class RsIdVepPost():
     
 if __name__ == '__main__':
     from pprint import pprint
-    rs_id_list_file = '/Users/mmaguire/CTTV/gwas_catalog/snp2gene_input_list.txt'
+    rs_id_list_file = './test_data/rs_id_list.txt'
     rs_ids = open(rs_id_list_file, 'rt').read().split('\n')
     vep_post = RsIdVepPost(rs_ids)
     rs_id_sublists = vep_post.get_rs_id_sublists()
     #print '\n'.join(json.dumps(vep_post.get_vep_post_output_jsons()))
     #print len(vep_post.get_post_request_errors())
     print '\n'.join(vep_post.get_rs_ids_not_in_vep_output()) + '\n'
-    vep_post.write_vep_jsons_to_file('/Users/mmaguire/CTTV/gwas_catalog/test_vep_post_rs_ids_output.txt')
+    vep_post.write_vep_jsons_to_file('./test_data/test_vep_output.json')
