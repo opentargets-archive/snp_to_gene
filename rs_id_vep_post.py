@@ -55,7 +55,7 @@ class RsIdVepPost():
 if __name__ == '__main__':
     rs_id_list_file = './test_data/rs_id_list.txt'
     rs_ids = open(rs_id_list_file, 'rt').read().split('\n')
-    vep_post = RsIdVepPost([])
+    vep_post = RsIdVepPost(rs_ids)
     vep_post_output = vep_post.get_vep_post_output()
     print vep_post_output
 
