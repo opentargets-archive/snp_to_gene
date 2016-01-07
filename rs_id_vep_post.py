@@ -44,7 +44,6 @@ class RsIdVepPost():
                 success = True
             except ValueError as ex:
                 if ex.message == 'No JSON object could be decoded':
-                    print ex.message
                     time.sleep(1)
                     retry_count += 1
                     if retry_count == max_retry_count:
