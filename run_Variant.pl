@@ -17,8 +17,10 @@ my $rs_id_list_file = $ARGV[0];
 my $file_to_list = FileToList->new($rs_id_list_file);
 my $rs_ids = $file_to_list->get_lines_as_list();
 my $variant = Variant->new();
+my @variants_in_ensembl_maps;
 my %variant_in_ensembl_map;
 foreach my $rs_id (@$rs_ids) {
     $variant_in_ensembl_map{$rs_id} = $variant->is_variant_in_ensembl($rs_id);
+    push @variants_in_ensembl_maps, \%variant_in_ensembl_map;
 }
-print  encode_json(\%variant_in_ensembl_map);
+print  encode_json(\@variants_in_ensembl_maps);
