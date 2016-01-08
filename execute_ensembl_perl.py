@@ -2,8 +2,10 @@ from subprocess import Popen, PIPE
 import json
 
 '''
-
-
+All calls to Perl scripts that use the Ensembl API are wrapped here.
+Each Perl script call is arapped in its own method.
+These Perl methods all print data structures serialized as JSON to stdout and the methods here
+return these JSONs as Python data structures.
 '''
 
 class ExecuteEnsemblPerl:
