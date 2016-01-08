@@ -13,7 +13,6 @@ $registry->load_registry_from_db(
     -host => 'ensembldb.ensembl.org', # alternatively 'useastdb.ensembl.org'
     -user => 'anonymous'
 );
-my $gene_adaptor = $registry->get_adaptor( 'Human', 'Core', 'Gene' );
 my $var_adaptor = $registry->get_adaptor( 'human', 'variation', 'variation' );
 # Pass an Ensembl gene ID to the constructor that uses this to create an Ensembl gene
 # instance variable.
