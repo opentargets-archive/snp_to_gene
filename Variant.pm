@@ -18,15 +18,16 @@ my $var_adaptor = $registry->get_adaptor( 'human', 'variation', 'variation' );
 # instance variable.
 sub new {
     my $class = shift;
+    my $rs_id = shift;
     my $self = {};
+    $self->{_rs_id} = $rs_id;
+    $self->{_var} = $var_adaptor->fetch_by_name($self->{_rs_id});
     bless $self, $class;
     return $self;
 }
 
 sub is_variant_in_ensembl {
     my $self = shift;
-    my $rs_id = shift;
-    my $var = $var_adaptor->fetch_by_name($rs_id);
-    $var ? 1 : 0;
+    $self->{_var} ? 1 : 0;
 }
 1;
