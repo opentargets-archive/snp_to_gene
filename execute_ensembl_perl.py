@@ -3,7 +3,7 @@ import json
 
 '''
 All calls to Perl scripts that use the Ensembl API are wrapped here.
-Each Perl script call is arapped in its own method.
+Each Perl script call is wrapped in its own method.
 These Perl methods all print data structures serialized as JSON to stdout and the methods here
 return these JSONs as Python data structures.
 '''
@@ -28,7 +28,7 @@ class ExecuteEnsemblPerl:
         to indicate if the rs ID is present in the current Ensembl.
         :return: list
         '''
-        perl_cmd = 'perl run_Variant.pl %s' % self._rs_id_list_file
+        perl_cmd = 'perl variants_in_ensembl.pl %s' % self._rs_id_list_file
         return self.__get_json_output_for_perl_cmd(perl_cmd)
     def get_nearest_gene_map(self):
         '''
