@@ -32,6 +32,8 @@ class NearestGeneFivePrime():
         Return a dictionary with required gene ID and distance information.
         Default rank=0 chooses the nearest gene but can provide rank=1
         to get, for example, the next nearest gene.
+        :param rank: int
+        :return: dictionary
         '''
         nearest_gene_map = self.get_gene_map_for_rank(rank)
         return nearest_gene_map
