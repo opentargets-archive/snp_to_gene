@@ -1,8 +1,9 @@
 from subprocess import Popen, PIPE
 import json
-from execute_ensembl_perl import ExecuteEnsemblPerl
 '''
-
+Process a list of nearest gene at the 5' for a single rs ID.
+Takes a single dictionary entry as a list of hashes from the output produced by "execute_ensembl_perl.py"
+and sorts the dictionary entries so that the nearest gene and next nearest if required can be extracted.
 '''
 
 class NearestGeneFivePrime():
@@ -39,6 +40,7 @@ class NearestGeneFivePrime():
         return nearest_gene_map
         
 if __name__ == '__main__':
+    from execute_ensembl_perl import ExecuteEnsemblPerl
     test_file = './test_data/rs_id_list.txt'
     exec_ensembl_perl = ExecuteEnsemblPerl(test_file)
     nearest_gene_map = exec_ensembl_perl.get_nearest_gene_map()
