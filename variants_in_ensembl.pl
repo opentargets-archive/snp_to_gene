@@ -9,7 +9,7 @@ use JSON;
 Print a JSON that maps rs ID to a Boolean (0 and 1) indicating
 if the rs ID is present in the current Ensembl.
 Test on local machine:
-$ perl /Users/mmaguire/PycharmProjects/snp_to_gene/run_Variant.pl  \
+$ perl /Users/mmaguire/PycharmProjects/snp_to_gene/variants_in_ensembl.pl  \
        /Users/mmaguire/PycharmProjects/snp_to_gene/test_data/rs_id_list.txt
 May need to set PERL5LIB.
 =cut
