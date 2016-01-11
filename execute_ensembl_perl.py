@@ -42,5 +42,5 @@ class ExecuteEnsemblPerl:
 if __name__ == '__main__':
     test_file = './test_data/rs_id_list.txt'
     exec_ensembl_perl = ExecuteEnsemblPerl(test_file)
-    print exec_ensembl_perl.get_variant_in_ensembl_maps()
+    print exec_ensembl_perl.get_variant_in_ensembl_map()
     print exec_ensembl_perl.get_nearest_gene_map()
