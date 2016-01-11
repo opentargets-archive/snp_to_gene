@@ -54,7 +54,8 @@ class CollectVariantData:
         for sublist in self.__chunk_list(rs_ids):
             rs_id_vep_post = RsIdVepPost(sublist)
             vep_output = rs_id_vep_post.get_vep_post_output()
-            vep_outputs.append(vep_output)
+            for entry in vep_output:
+                vep_outputs.append(entry)
         return vep_outputs
 
 if __name__ == '__main__':
