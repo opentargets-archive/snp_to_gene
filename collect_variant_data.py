@@ -22,7 +22,7 @@ class CollectVariantData:
         Uses the Perl Ensembl REST API to determine if input variants are in Ensembl.
         :return: dict
         '''
-        return self.ensembl_perl.get_variant_in_ensembl_maps()
+        return  self.ensembl_perl.get_variant_in_ensembl_map()
     def get_nearest_gene_map(self):
         '''
         Uses the PERL Ensembl API to get the nearest gene at the 5' end for each variant.
