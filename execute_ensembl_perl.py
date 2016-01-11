@@ -22,7 +22,7 @@ class ExecuteEnsemblPerl:
         if len(stderr) >0:
             raise Exception('Perl call has thrown error: %s' % stderr)
         return json.loads(stdout)
-    def get_variant_in_ensembl_maps(self):
+    def get_variant_in_ensembl_map(self):
         '''
         Return a list of dictionaries where the dictionary maps the rs ID to a boolean
         to indicate if the rs ID is present in the current Ensembl.
