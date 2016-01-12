@@ -52,9 +52,9 @@ class CollectVariantData:
         vep_outputs = []
         rs_ids = [rs_id.strip() for rs_id in open(self.rs_id_file, 'rt').read().split('\n')]
         for sublist in self.__chunk_list(rs_ids):
-            rs_id_vep_post = RsIdVepPost(sublist)
-            vep_output = rs_id_vep_post.get_vep_post_output()
-            for entry in vep_output:
+            vep_post = RsIdVepPost(sublist)
+            vep_post_output = vep_post.get_vep_post_output()
+            for entry in vep_post_output:
                 vep_outputs.append(entry)
         return vep_outputs
 
@@ -64,3 +64,5 @@ if __name__ == '__main__':
     variants_in_ensembl_map = collected_var_data.get_variants_in_ensembl_map()
     nearest_gene_map = collected_var_data.get_nearest_gene_map()
     rest_api_vep_list = collected_var_data.get_rest_api_vep_list()
+    for entry in rest_api_vep_list:
+        print entry['id'], entry['most_severe_consequence']
