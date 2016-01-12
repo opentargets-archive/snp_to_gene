@@ -57,5 +57,6 @@ if __name__ == '__main__':
     rs_ids = open(rs_id_list_file, 'rt').read().split('\n')
     vep_post = RsIdVepPost(rs_ids)
     vep_post_output = vep_post.get_vep_post_output()
-    print vep_post_output
+    for entry in vep_post_output:
+        print entry['id'], entry['most_severe_consequence']
 
