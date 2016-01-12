@@ -20,17 +20,18 @@ class AssignVariants:
         for vep_entry in self.rest_api_vep_list:
             variant_id = vep_entry['id']
             most_severe_consequence = vep_entry['most_severe_consequence']
-            transcript_consequences = vep_entry['transcript_consequences']
+            transcript_consequences = vep_entry.get('transcript_consequences', [{'consequence_terms':[]}])
             associated_gene_ids = []
             for transcript_consequence in transcript_consequences:
                 if most_severe_consequence in transcript_consequence['consequence_terms']:
                     gene_id = transcript_consequence['gene_id']
-                    associated_gene_ids.append(gene_id)
+                    if gene_id not in associated_gene_ids:
+                        associated_gene_ids.append(gene_id)
             vep_details = {}
             vep_details['most_severe_consequence'] = most_severe_consequence
             vep_details['associated_gene_ids'] = associated_gene_ids
             parsed_vep_output_map[variant_id] = vep_details
-            return parsed_vep_output_map
+        return parsed_vep_output_map
 
     def get_assigned_variant_list(self):
         '''
@@ -60,5 +61,6 @@ class AssignVariants:
 if __name__ == '__main__':
     rs_id_list_file = 'test_data/rs_id_list.txt'
     assigned_variants = AssignVariants(rs_id_list_file)
+    assigned_variants.get_assigned_variant_list()
     for assigned_variant in assigned_variants.get_assigned_variant_list():
         print assigned_variant
