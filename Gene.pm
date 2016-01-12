@@ -14,6 +14,7 @@ $registry->load_registry_from_db(
     -user => 'anonymous'
 );
 my $gene_adaptor = $registry->get_adaptor( 'Human', 'Core', 'Gene' );
+
 # Pass an Ensembl gene ID to the constructor that uses this to create an Ensembl gene
 # instance variable.
 sub new {
@@ -34,6 +35,7 @@ sub is_reference_ensembl_gene_id {
     my $gene = shift || $self->{_gene};
     return $gene->slice->is_reference();
 }
+
 # Most of the required information is contained in the hash returned by this method.
 # Default Gene object to check is the one created in the constructor
 # but a different Gene object can also be passed.
@@ -45,6 +47,7 @@ sub get_gene_detail_map {
     }
     return $gene->summary_as_hash;
 }
+
 # Return the external name (HGNC-recognised symbol) for the gene object created in the constructor.
 sub get_external_name {
     my $self = shift;
