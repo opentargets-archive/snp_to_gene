@@ -1,5 +1,6 @@
 from subprocess import Popen, PIPE
 import json
+import tempfile
 
 '''
 All calls to Perl scripts that use the Ensembl API are wrapped here.
@@ -38,9 +39,19 @@ class ExecuteEnsemblPerl:
         '''
         perl_cmd = 'perl run_NearestGeneToSnp.pl %s' % self._rs_id_list_file
         return self.__get_json_output_for_perl_cmd(perl_cmd)
+    def get_ensembl_gene_id_ref_map(self, ensembl_gene_ids):
+        '''
+
+        :param ensembl_gene_ids: list
+        :return: object
+        '''
+        perl_cmd = 'perl map_to_reference_ensembl_ids.pl  % ' '"' + '"'  + ' '.join(ensembl_gene_ids)
+        return self.__get_json_output_for_perl_cmd(perl_cmd)
 
 if __name__ == '__main__':
     test_file = './test_data/rs_id_list.txt'
     exec_ensembl_perl = ExecuteEnsemblPerl(test_file)
-    print exec_ensembl_perl.get_variant_in_ensembl_map()
-    print exec_ensembl_perl.get_nearest_gene_map()
+    #print exec_ensembl_perl.get_variant_in_ensembl_map()
+    #print exec_ensembl_perl.get_nearest_gene_map()
+    ensembl_gene_ids = ['ENSG00000204305', 'ENSG00000206320', 'ENSG0000022905']
+    print exec_ensembl_perl.get_ensembl_gene_id_ref_map(ensembl_gene_ids)
