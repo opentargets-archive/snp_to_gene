@@ -28,7 +28,7 @@ class RsIdVepPost():
         ids_list = '{ "ids" : %s }' % rs_id_string_formatted_for_post
         req = requests.post(server+ext, headers=headers, data=ids_list)
         return req.json()
-    def get_vep_post_output(self, max_retry_count = 3):
+    def get_vep_post_output(self, max_retry_count = 10):
         '''
         Calls "__query_rest_api()" in a loop to allow for
         failures. If the call does not generate an exception, the VEP info JSON is returned.

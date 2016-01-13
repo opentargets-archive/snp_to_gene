@@ -1,7 +1,7 @@
 from assign_variants import AssignVariants
 from execute_ensembl_perl import ExecuteEnsemblPerl
 class WriteGeneAssignments:
-    def __init__(self, rs_id_file, tsv_output_file):
+    def __init__(self, rs_id_file):
         '''
 
         :param rs_id_file: str
@@ -54,8 +54,36 @@ class WriteGeneAssignments:
         exec_ensembl_perl = ExecuteEnsemblPerl()
         reference_gene_map = exec_ensembl_perl.get_ensembl_gene_id_ref_map(ensembl_id_uniq)
         return reference_gene_map
+    def write_output_to_file(self, path_to_output_file):
+        '''
 
+        :param path_to_file: string
+        :return: None
+        '''
+        new_output_rows = []
+        for output_row in self.output_rows:
+            (rs_id, in_ensembl, ensembl_gene_ids, so_term, distance) = output_row
+            #    (output_row[0], output_row[1], output_row[2], output_row[3])
+            gene_symbols = []
+            ensembl_gene_id_references = []
+            for ensembl_gene_id in ensembl_gene_ids:
+                try:
+                    ref_gene_map = self.reference_gene_map[ensembl_gene_id]
+                except KeyError:
+                    continue
+                gene_symbol = ref_gene_map['external_name']
+                ensembl_gene_id_reference = ref_gene_map.get('ensembl_gene_id_for_reference', None)
+                gene_symbols.append(gene_symbol)
+                ensembl_gene_id_references.append(ensembl_gene_id_reference)
+            new_output_row = [rs_id, in_ensembl, ','.join(ensembl_gene_id_references), ','.join(gene_symbols), so_term, distance]
+            print new_output_row
+            new_output_rows.append(new_output_row)
+        with open(path_to_output_file, 'w') as fho:
+            for data_row in new_output_rows:
+                fho.write('\t'.join([str(element) for element in data_row]) + '\n')
 
 if __name__ == '__main__':
-    rs_id_list_file = 'test_data/rs_id_list.txt'
-    gene_assignments_writer = WriteGeneAssignments(rs_id_list_file, 'file')
+    rs_id_list_file = '/Users/mmaguire/CTTV/cttv009_gwas_catalog/gwas-snp-2015-10-08.txt'
+    gene_assignments_writer = WriteGeneAssignments(rs_id_list_file)
+    output_file = '/Users/mmaguire/CTTV/cttv009_gwas_catalog/gwas_snp_20160113.tsv'
+    gene_assignments_writer.write_output_to_file(output_file)
