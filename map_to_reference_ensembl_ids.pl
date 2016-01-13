@@ -4,6 +4,13 @@ use v5.10;
 use Gene;
 use JSON;
 
+=head
+Given a list of Ensembl gene IDs as arguments, print JSON that maps the IDs to the reference IDs and provides
+the HGNC recognised gene symbols.
+The returned JSON is a hash-of-hashes where the outer keys are the input Ensembl IDs and the inner keys
+provide the reference Ensembl ID for that gene and the HGNC symbol.
+=cut
+
 my @ensembl_gene_ids = @ARGV;
 @ensembl_gene_ids = grep { $_ =~ /^ENSG/} @ensembl_gene_ids;
 my %ensembl_reference_id_map;
