@@ -1,6 +1,6 @@
 from subprocess import Popen, PIPE
 import json
-import tempfile
+
 
 '''
 All calls to Perl scripts that use the Ensembl API are wrapped here.
@@ -10,7 +10,7 @@ return these JSONs as Python data structures.
 '''
 
 class ExecuteEnsemblPerl:
-    def __init__(self, rs_id_list_file):
+    def __init__(self, rs_id_list_file=None):
         self._rs_id_list_file = rs_id_list_file
     def __get_json_output_for_perl_cmd(self, perl_cmd):
         '''
@@ -50,7 +50,7 @@ class ExecuteEnsemblPerl:
 
 if __name__ == '__main__':
     test_file = './test_data/rs_id_list.txt'
-    exec_ensembl_perl = ExecuteEnsemblPerl(test_file)
+    exec_ensembl_perl = ExecuteEnsemblPerl()
     #print exec_ensembl_perl.get_variant_in_ensembl_map()
     #print exec_ensembl_perl.get_nearest_gene_map()
     ensembl_gene_ids = ['ENSG00000204305', 'ENSG00000206320', 'ENSG0000022905']
