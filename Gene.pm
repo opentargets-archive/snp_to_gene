@@ -33,7 +33,10 @@ sub new {
 sub is_reference_ensembl_gene_id {
     my $self = shift;
     my $gene = shift || $self->{_gene};
-    return $gene->slice->is_reference();
+    if( defined $gene) {
+        return $gene->slice->is_reference();
+    }
+    return undef;
 }
 
 # Most of the required information is contained in the hash returned by this method.
@@ -42,7 +45,7 @@ sub is_reference_ensembl_gene_id {
 sub get_gene_detail_map {
     my $self = shift;
     my $gene = shift || $self->{_gene};
-    unless($gene) {
+    unless( defined $gene) {
 	    return {};
     }
     return $gene->summary_as_hash;
@@ -51,7 +54,10 @@ sub get_gene_detail_map {
 # Return the external name (HGNC-recognised symbol) for the gene object created in the constructor.
 sub get_external_name {
     my $self = shift;
-    return $self->{_gene}->summary_as_hash->{'Name'};
+    if( defined $self->{_gene}) {
+        return $self->{_gene}->summary_as_hash->{'Name'};
+    }
+    return undef;
 }
 
 # Returns an Ensembl gene ID.
