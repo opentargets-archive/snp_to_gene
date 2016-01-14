@@ -23,7 +23,8 @@ class AssignVariants:
             transcript_consequences = vep_entry.get('transcript_consequences', [{'consequence_terms':[]}])
             associated_gene_ids = []
             for transcript_consequence in transcript_consequences:
-                if most_severe_consequence in transcript_consequence['consequence_terms']:
+                if most_severe_consequence in transcript_consequence['consequence_terms'] and \
+                        transcript_consequence['biotype'] == 'protein_coding':
                     gene_id = transcript_consequence['gene_id']
                     if gene_id not in associated_gene_ids:
                         associated_gene_ids.append(gene_id)
