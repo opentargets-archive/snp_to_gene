@@ -76,7 +76,6 @@ class WriteGeneAssignments:
                 gene_symbols.append(gene_symbol)
                 ensembl_gene_id_references.append(ensembl_gene_id_reference)
             new_output_row = [rs_id, in_ensembl, ','.join(ensembl_gene_id_references), ','.join(gene_symbols), so_term, distance]
-            print new_output_row
             new_output_rows.append(new_output_row)
         with open(path_to_output_file, 'w') as fho:
             for data_row in new_output_rows:
