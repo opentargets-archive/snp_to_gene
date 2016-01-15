@@ -82,7 +82,7 @@ class WriteGeneAssignments:
                 fho.write('\t'.join([str(element) for element in data_row]) + '\n')
 
 if __name__ == '__main__':
-    rs_id_list_file = '/Users/mmaguire/CTTV/cttv009_gwas_catalog/gwas-snp-2015-10-08.txt'
+    rs_id_list_file = '/Users/mmaguire/CTTV/cttv009_gwas_catalog/big_rs_id_list.txt'
     gene_assignments_writer = WriteGeneAssignments(rs_id_list_file)
-    output_file = '/Users/mmaguire/CTTV/cttv009_gwas_catalog/gwas_snp_20160113.tsv'
+    output_file = '/Users/mmaguire/CTTV/cttv009_gwas_catalog/big_rs_id_list_output.tsv'
     gene_assignments_writer.write_output_to_file(output_file)
