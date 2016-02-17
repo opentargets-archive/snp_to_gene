@@ -17,6 +17,7 @@ class WriteGeneAssignments:
                                 'distance']
         self.output_rows = self.__process_assigned_variants()
         self.reference_gene_map = self.__get_reference_gene_map()
+
     def __process_assigned_variants(self):
         '''
 
@@ -42,6 +43,7 @@ class WriteGeneAssignments:
                 ensembl_gene_ids = [row_map['nearest_5p_ensembl_gene_id']]
             output_rows.append([rs_id, in_ensembl, ensembl_gene_ids,so_term, distance ])
         return output_rows
+
     def __get_reference_gene_map(self):
         '''
 
