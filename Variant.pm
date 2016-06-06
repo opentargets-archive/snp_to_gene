@@ -5,7 +5,7 @@ use Data::Dump "pp";
 use Bio::EnsEMBL::Registry;
 
 =head
-Contains methods to return usefil information for human rs IDs.
+Contains methods to return useful information for human rs IDs.
 =cut
 package Variant;
 my $registry = 'Bio::EnsEMBL::Registry';

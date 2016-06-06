@@ -2,7 +2,7 @@ from collect_variant_data import CollectVariantData
 from nearest_gene_five_prime import NearestGeneFivePrime
 
 class AssignVariants:
-    def __init__(self, ensembl_release, rs_id_file):
+    def __init__(self, rs_id_file):
         '''
 
         :param rs_id_file: str
@@ -12,8 +12,8 @@ class AssignVariants:
         self.variants_in_ensembl_map = collected_var_data.get_variants_in_ensembl_map()
         self.nearest_gene_map = collected_var_data.get_nearest_gene_map()
         self.rest_api_vep_list = collected_var_data.get_rest_api_vep_list()
-        ensembl_gene_info = EnsemblGeneInfo(ensembl_release)
-        self.gene_info_map = ensembl_gene_info.get_gene_info_json_map()
+        #ensembl_gene_info = EnsemblGeneInfo(ensembl_release)
+        #self.gene_info_map = ensembl_gene_info.get_gene_info_json_map()
     def __get_parsed_vep_output_map(self):
         '''
 
@@ -65,8 +65,7 @@ class AssignVariants:
         return assigned_variant_list
 if __name__ == '__main__':
     rs_id_list_file = 'test_data/rs_id_list.txt'
-    ensembl_release = 83
-    assigned_variants = AssignVariants(ensembl_release, rs_id_list_file)
+    assigned_variants = AssignVariants(rs_id_list_file)
     assigned_variants.get_assigned_variant_list()
     for assigned_variant in assigned_variants.get_assigned_variant_list():
         print assigned_variant
