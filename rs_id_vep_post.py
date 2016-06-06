@@ -21,6 +21,7 @@ class RsIdVepPost():
         Create the parameters for the POST call and execute it.
         Return the request JSON.
         '''
+        time.sleep(1) # Ensure a pause when used in a loop.
         server = "http://rest.ensembl.org"
         ext = "/vep/human/id"
         headers={ "Content-Type" : "application/json", "Accept" : "application/json"}

@@ -1,7 +1,8 @@
 from collect_variant_data import CollectVariantData
 from nearest_gene_five_prime import NearestGeneFivePrime
+
 class AssignVariants:
-    def __init__(self, rs_id_file):
+    def __init__(self, ensembl_release, rs_id_file):
         '''
 
         :param rs_id_file: str
@@ -11,6 +12,8 @@ class AssignVariants:
         self.variants_in_ensembl_map = collected_var_data.get_variants_in_ensembl_map()
         self.nearest_gene_map = collected_var_data.get_nearest_gene_map()
         self.rest_api_vep_list = collected_var_data.get_rest_api_vep_list()
+        ensembl_gene_info = EnsemblGeneInfo(ensembl_release)
+        self.gene_info_map = ensembl_gene_info.get_gene_info_json_map()
     def __get_parsed_vep_output_map(self):
         '''
 
@@ -18,13 +21,14 @@ class AssignVariants:
         '''
         parsed_vep_output_map = {}
         for vep_entry in self.rest_api_vep_list:
+            if 'id' not in vep_entry: continue # skip key errors in output VEP JSON
             variant_id = vep_entry['id']
             most_severe_consequence = vep_entry['most_severe_consequence']
             transcript_consequences = vep_entry.get('transcript_consequences', [{'consequence_terms':[]}])
             associated_gene_ids = []
             for transcript_consequence in transcript_consequences:
                 if most_severe_consequence in transcript_consequence['consequence_terms'] and \
-                        transcript_consequence['biotype'] == 'protein_coding':
+                                transcript_consequence['biotype'] == 'protein_coding':
                     gene_id = transcript_consequence['gene_id']
                     if gene_id not in associated_gene_ids:
                         associated_gene_ids.append(gene_id)
@@ -61,7 +65,8 @@ class AssignVariants:
         return assigned_variant_list
 if __name__ == '__main__':
     rs_id_list_file = 'test_data/rs_id_list.txt'
-    assigned_variants = AssignVariants(rs_id_list_file)
+    ensembl_release = 83
+    assigned_variants = AssignVariants(ensembl_release, rs_id_list_file)
     assigned_variants.get_assigned_variant_list()
     for assigned_variant in assigned_variants.get_assigned_variant_list():
         print assigned_variant
