@@ -29,7 +29,7 @@ file_name = os.path.basename(big_rs_id_file)
 (name, ext) = os.path.splitext(file_name)
 chunk = 0
 run_cmd_template = 'python run_snp_to_gene_pipeline.py %s %s'
-for sub_list in chunk_list(rs_id_list):
+for sub_list in chunk_list(rs_id_list, 500):
     chunk += 1
     subfile = os.path.join(target_dir, (name + '_chunk_' + str(chunk) + ext))
     subfile_out = os.path.join(target_dir, (name + '_chunk_' + str(chunk) + '_output' + ext))

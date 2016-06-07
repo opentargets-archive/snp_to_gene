@@ -12,8 +12,6 @@ class AssignVariants:
         self.variants_in_ensembl_map = collected_var_data.get_variants_in_ensembl_map()
         self.nearest_gene_map = collected_var_data.get_nearest_gene_map()
         self.rest_api_vep_list = collected_var_data.get_rest_api_vep_list()
-        #ensembl_gene_info = EnsemblGeneInfo(ensembl_release)
-        #self.gene_info_map = ensembl_gene_info.get_gene_info_json_map()
     def __get_parsed_vep_output_map(self):
         '''
 

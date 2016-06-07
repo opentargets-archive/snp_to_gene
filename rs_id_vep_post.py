@@ -48,6 +48,7 @@ class RsIdVepPost():
                     time.sleep(1)
                     retry_count += 1
                     if retry_count == max_retry_count:
+                        print ex.message
                         raise Exception("Maximum retry count reached!")
                 else:
                     raise ex
