@@ -20,8 +20,12 @@ class ExecuteEnsemblPerl:
         '''
         p = Popen(perl_cmd, stdout=PIPE, stderr=PIPE, shell=True)
         stdout, stderr = p.communicate()
+
         if len(stderr) >0:
-            raise Exception('Perl call has thrown error: %s' % stderr)
+            if stderr.index('UNIVERSAL->import is deprecated and will be removed in a future perl') > -1):
+                pass
+            else:
+                raise Exception('Perl call has thrown error: %s' % stderr)
         return json.loads(stdout)
     def get_variant_in_ensembl_map(self):
         '''
