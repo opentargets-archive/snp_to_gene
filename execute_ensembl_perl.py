@@ -22,7 +22,7 @@ class ExecuteEnsemblPerl:
         stdout, stderr = p.communicate()
 
         if len(stderr) >0:
-            if stderr.index('UNIVERSAL->import is deprecated and will be removed in a future perl') > -1):
+            if stderr.index('UNIVERSAL->import is deprecated and will be removed in a future perl') > -1:
                 pass
             else:
                 raise Exception('Perl call has thrown error: %s' % stderr)
