@@ -29,7 +29,7 @@ class CollectVariantData:
         :return: dict
         '''
         return self.ensembl_perl.get_nearest_gene_map()
-    def __chunk_list(self, input_list, chunk_size=500):
+    def __chunk_list(self, input_list, chunk_size=200):
         '''
         Breaks the input list into chunks. Used to limit the number of variants
         sent to the Ensembl REST VEP POST API call.
@@ -59,7 +59,7 @@ class CollectVariantData:
         return vep_outputs
 
 if __name__ == '__main__':
-    rs_id_list_file = 'test_data/big_rs_id_list.txt'
+    rs_id_list_file = '/Users/mmaguire/CTTV/cttv009_gwas_catalog/new_rs_ids2assign_july2016.txt'
     collected_var_data = CollectVariantData(rs_id_list_file)
     variants_in_ensembl_map = collected_var_data.get_variants_in_ensembl_map()
     nearest_gene_map = collected_var_data.get_nearest_gene_map()
