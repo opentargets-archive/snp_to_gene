@@ -6,7 +6,7 @@
 
  Given a single column file with variant IDs (rs_id or clinvar_id)
  get gene assignment and required information (SO terms etc) 
- from the Ensembl Perl API and VEP REST endpoint.
+ using Ensembl Perl API and VEP REST endpoint.
 
  Methods Overview:
 
@@ -25,6 +25,9 @@
  5: SO term
  6: Distance to nearest gene at 5’ (0 for intragenic variants)
 
+ limit to 15 requests per second but also look for the 'Retry-After' header
+ to ensure they are not rate limited due to shared IP addresses.
+
 =pod
   
 =head1 AUTHOR/MAINTAINER
@@ -37,6 +40,7 @@ use warnings;
 use Data::Dumper;
 use Bio::EnsEMBL::Registry;
 use HTTP::Tiny;
+use Time::HiRes;
 use JSON;
 use FileToList;
 use NearestGeneToSnp;
@@ -52,12 +56,17 @@ $registry->load_registry_from_db(
 my $gene_adaptor = $registry->get_adaptor('human', 'core', 'gene' );
 my $var_adaptor  = $registry->get_adaptor('human', 'variation', 'variation');
 
-my $file         = $ARGV[0];
-my $file_to_list = FileToList->new($file);
+my $file          = $ARGV[0];
+my $file_to_list  = FileToList->new($file);
+
+my $request_count = 0;
+my $last_request_time = Time::HiRes::time();
+
 # ref to array 
 my $ids = $file_to_list->get_lines_as_list();
 
 foreach my $id (@$ids){ 
+   # TODO: to be removed when we use positional information
    next unless($id =~ /^rs/ || $id =~ /^RCV/);
 
    my $var   = $var_adaptor->fetch_by_name($id);
@@ -116,11 +125,6 @@ foreach my $id (@$ids){
 
  Return a JSON for VEP results of variant identifiers 
 
- #TODO:
- - Will re-try up to the number set in "max_retry_count" and raises an
-   exception when this limit is reached.
- - Try to use POST
-
 =cut
 sub _GetVepData {
     my ($id) = @_;
@@ -131,29 +135,44 @@ sub _GetVepData {
 
     $ext = $ext.$id."?";
 
-    # Ensure a pause between successive REST call
-    # TODO: What is the response time of each REST call to optimize this parameter
-    sleep(2);
-   
-    #my $response = $http->get($server.$ext, {
-    #	headers => { 'Content-type' => 'application/json' }
-    #});
- 
-    #die "Failed! No variation found for $id\n" unless $response->{success};
+    if($request_count == 15) { # check evey 15
+	my $current_time = Time::HiRes::time();
+        my $time_diff    = $current_time - $last_request_time;
 
-    my $response;
-    my $max_retry = 0;
+        # sleep for remainder of the sec
+        # if $time_diff less than 1 sec
+	Time::HiRes::sleep(1-$time_diff) if($time_diff < 1);
 
-    while ($max_retry < 5){
-      $response = $http->get($server.$ext, {
-        headers => { 'Content-type' => 'application/json' }
-      });
-      $max_retry++;
-     
-      last if($response->{success});
+        # reset timer
+        $last_request_time = Time::HiRes::time();
+        $request_count = 0 ;
     }
+  
+    my $response = $http->get($server.$ext, {
+    	headers => { 'Content-type' => 'application/json' }
+    });
 
-return $response->{content} if(length $response->{content});
+    my $status = $response->{status};
+
+    if(!$response->{success}){
+	# check for rate limit exceeded & retry-after 
+        #  HTTP Response code 429 =>
+        #  'Too Many Request, You have been rate-limited; wait and retry.'
+	if($status == 429 && exists $response->{headers}->{'retry-after'}) {
+		my $retry = $response->{headers}->{'retry-after'};
+      		Time::HiRes::sleep($retry);
+      		# after sleeping re-request
+		return _GetVepData($id);
+ 	} else {
+		my ($status, $reason) = ($response->{status}, $response->{reason});
+      		die "Failed for $id! Status code: ${status}. Reason: ${reason}\n";
+        }
+   }	
+	
+  $request_count++;
+  return $response->{content} if(length $response->{content});
+
+return;
 }
 
 =head2 _NearestGeneToSnp
