@@ -66,8 +66,6 @@ my $last_request_time = Time::HiRes::time();
 my $ids = $file_to_list->get_lines_as_list();
 
 foreach my $id (@$ids){ 
-   # TODO: to be removed when we use positional information
-   next unless($id =~ /^rs/ || $id =~ /^RCV/);
 
    my $var   = $var_adaptor->fetch_by_name($id);
    # check variant status in ensembl
