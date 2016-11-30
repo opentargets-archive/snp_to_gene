@@ -83,21 +83,8 @@ foreach my $id (@$ids){
       		my $most_severe_consequence = $entry->{most_severe_consequence};
       		my $rs_id   = $entry->{id};
 
-		# e.g rs869025300
-		if($most_severe_consequence=~/\?/ || $most_severe_consequence=~/intergenic_variant/){
-			my $nearest_gene = _NearestGeneToSnp($rs_id);
-
-			if(scalar(@$nearest_gene) > 0){
-		   		my $gene_id      = @$nearest_gene[0]->{ensembl_gene_id};
-		   		my $gene_symbol  = @$nearest_gene[0]->{external_name};
-				my $consequence  = 'nearest_gene_five_prime_end';
-				my $distance  = @$nearest_gene[0]->{distance};
-			
-                   		print "$rs_id\t$in_ensembl\t$gene_id\t$gene_symbol\t$consequence\t$distance\n";
-			} else { print "$rs_id\t$in_ensembl\tNo nearest_gene_five_prime_end found!\n"; }
-		}      		
-
 		# arr_of_hash
+		my $flag    = 0;
       		my $tr_cons = $entry->{transcript_consequences};
 	
       		foreach my $entry_2 (@$tr_cons) { 
@@ -109,10 +96,30 @@ foreach my $id (@$ids){
 			my $distance    = 0;
 
 			# obtain gene with 'most_severe_consequence'
+                       next unless ($biotype =~/protein_coding/ || $biotype =~/miRNA/);                                                
+
 	 		if(grep(/$most_severe_consequence/, @terms)){
-			    print "$rs_id\t$in_ensembl\t$gene_id\t$gene_symbol\t$most_severe_consequence\t$distance\n" unless($biotype !~/protein_coding/);
+			    print "$rs_id\t$in_ensembl\t$gene_id\t$gene_symbol\t$most_severe_consequence\t$distance\n";
 	 		}
+			$flag = 1 if($biotype =~/protein_coding/);
      		}
+
+#
+               # e.g rs869025300
+               # revisit snp assign to miRNA gene, to get nearest protein_coding genes as well
+               if($most_severe_consequence=~/\?/ || $most_severe_consequence=~/intergenic_variant/ || $flag==0){
+               		my $nearest_gene = _NearestGeneToSnp($rs_id);
+
+                        if(scalar(@$nearest_gene) > 0){
+                               my $gene_id      = @$nearest_gene[0]->{ensembl_gene_id};
+                                my $gene_symbol  = @$nearest_gene[0]->{external_name};
+                                my $consequence  = 'nearest_gene_five_prime_end';
+                                my $distance  = @$nearest_gene[0]->{distance};
+                        
+                                print "$rs_id\t$in_ensembl\t$gene_id\t$gene_symbol\t$consequence\t$distance\n";
+                        } else { print "$rs_id\t$in_ensembl\tNo nearest_gene_five_prime_end found!\n"; }
+               }   
+#
   	}    
   } 
   else { print "$id\t$in_ensembl\tVariant identifier NOT in Ensembl\n"; }
