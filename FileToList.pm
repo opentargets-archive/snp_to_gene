@@ -33,28 +33,45 @@ return $self;
     
   Ensure that the file is readable,
   parse the file, pull required columns
-  and made them into format required by 
+  and put them into format required by 
   VEP endpoint. 
-  
+ 
+  * Use rs_id as first option
+ 
   Return a reference to array
 
 =cut
 sub get_lines_as_list {
     my $self = shift;
-    my @coord_str;
+    my @ids;
 
     confess("File not readable!")if(! -r $self->{full_file_path}); 
     open (FILE, $self->{full_file_path}) or confess("Unable to open file: $!");
 
     while(<FILE>){
       chomp $_;
-      	my ($chr, $start, $end, $ref, $alt, $rs_id, $rcv_id, $ncbi_gene_id, $strand) = split /\t/, $_;
-        my $coord_str = $chr.":".$start."-".$end.":".$strand."/".$alt;       
-        push @coord_str, $coord_str;
-    } 
+      my ($chr, $start, $end, $ref, $alt, $strand, $rs_id, $rcv_id, $ncbi_gene_id, $nsv_id) = split /\s+/, $_;
+
+      # assume 'na' and '-' can be used interchangeably
+      $ref = '-' if($ref eq 'na');
+      $alt = '-' if($alt eq 'na');
+  
+      # might need more logic to determined the type of struc var
+      # DEL/DUP/TDUP/INS
+      $alt = 'INS' if($ref eq '-' || $alt eq '-');
+
+      if($rs_id =~/^rs/){
+	push @ids, $rs_id
+      }elsif($rs_id =~/\-1/){
+        my $str = '1';
+        $str    = '-1' if($strand =~/\-/);
+        my $coord = $chr.":".$start."-".$end.":".$str."/".$alt;       
+        push @ids, $coord;
+      } 
+    }
     close FILE;
 	
-return \@coord_str;
+return \@ids;
 }
 
 # Does the same but deals only
