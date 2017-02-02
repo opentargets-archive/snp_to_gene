@@ -76,7 +76,6 @@ foreach my $id (@$ids){
    if($in_ensembl){
    	my $json        = _GetVepData($id);
    	my $arr_of_hash = decode_json($json);
-
 	# e.g. rs876660862, rs869320723
         print "$id\t$in_ensembl\tVEP Error, alleles look like an insertion\n" if(ref($arr_of_hash) ne 'ARRAY');
 
@@ -85,10 +84,11 @@ foreach my $id (@$ids){
    	foreach my $entry (@$arr_of_hash){
       		my $most_severe_consequence = $entry->{most_severe_consequence};
       		my $rs_id   = $entry->{id};
+
 		# arr_of_hash
 		my $flag    = 0;
       		my $tr_cons = $entry->{transcript_consequences};
-	
+
       		foreach my $entry_2 (@$tr_cons) { 
 	 	   my $gene_id     = $entry_2->{gene_id};
 	 	   my $gene_symbol = $entry_2->{gene_symbol};
@@ -96,12 +96,11 @@ foreach my $id (@$ids){
 	 	   my @terms       = @{$entry_2->{consequence_terms}};
 	 	   my $terms       = join ",", @terms;
 		   my $distance    = 0;
-
 		   # obtain gene with 'most_severe_consequence'
                    next unless ($biotype =~/protein_coding/ || $biotype =~/miRNA/);                                                
 
 	 	   if(grep(/$most_severe_consequence/, @terms)){
-			print "$rs_id\t$in_ensembl\t$gene_id\t$gene_symbol\t$most_severe_consequence\t$distance\n";
+			print "$id\t$in_ensembl\t$gene_id\t$gene_symbol\t$most_severe_consequence\t$distance\n";
 	 	   }
 		   $flag = 1 if($biotype =~/protein_coding/);
      		}
@@ -118,8 +117,8 @@ foreach my $id (@$ids){
                         my $consequence  = 'nearest_gene_five_prime_end';
                         my $distance  = @$nearest_gene[0]->{distance};
                         
-                        print "$rs_id\t$in_ensembl\t$gene_id\t$gene_symbol\t$consequence\t$distance\n";
-                   } else { print "$rs_id\t$in_ensembl\tNo nearest_gene_five_prime_end found!\n"; }
+                        print "$id\t$in_ensembl\t$gene_id\t$gene_symbol\t$consequence\t$distance\n";
+                   } else { print "$id\t$in_ensembl\tNo nearest_gene_five_prime_end found!\n"; }
                }   
   	}    
   } 
