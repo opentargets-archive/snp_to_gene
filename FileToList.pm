@@ -50,15 +50,7 @@ sub get_lines_as_list {
 
     while(<FILE>){
       chomp $_;
-      my ($chr, $start, $end, $ref, $alt, $strand, $rs_id, $rcv_id, $ncbi_gene_id, $nsv_id) = split /\s+/, $_;
-
-      # assume 'na' and '-' can be used interchangeably
-      $ref = '-' if($ref eq 'na');
-      $alt = '-' if($alt eq 'na');
-  
-      # might need more logic to determined the type of struc var
-      # DEL/DUP/TDUP/INS
-      $alt = 'INS' if($ref eq '-' || $alt eq '-');
+      my ($chr, $start, $end, $ref, $alt, $strand, $sv_type, $rs_id, $rcv_id, $ncbi_gene_id, $nsv_id) = split /\s+/, $_;
 
       if($rs_id =~/^rs/){
 	push @ids, $rs_id
