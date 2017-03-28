@@ -49,8 +49,10 @@ sub get_lines_as_list {
     open (FILE, $self->{full_file_path}) or confess("Unable to open file: $!");
 
     while(<FILE>){
+      # skipped NT expansion variants	 
+      next if($_=~/NT expansion/);
       chomp $_;
-      my ($chr, $start, $end, $ref, $alt, $strand, $sv_type, $rs_id, $rcv_id, $ncbi_gene_id, $nsv_id) = split /\s+/, $_;
+      my ($chr, $start, $end, $ref, $alt, $strand, $sv_type, $rs_id, $rcv_id, $ncbi_gene_id, $nsv_id, $misc) = split /\s+/, $_;
 
       if($rs_id =~/^rs/){
 	push @ids, $rs_id
