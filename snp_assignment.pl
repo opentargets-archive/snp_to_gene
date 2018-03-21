@@ -47,10 +47,12 @@ use NearestGeneToSnp;
 
 my $registry = 'Bio::EnsEMBL::Registry';
 
+$registry->set_reconnect_when_lost(1);
+
 $registry->load_registry_from_db(
     # alternatively 'useastdb.ensembl.org'
     -host => 'ensembldb.ensembl.org', 
-    -user => 'anonymous'
+    -user => 'anonymous',
 );
 
 my $gene_adaptor = $registry->get_adaptor('human', 'core', 'gene' );
