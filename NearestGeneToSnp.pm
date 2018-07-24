@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use v5.10;
-use Data::Dump "pp";
 use Bio::EnsEMBL::Registry;
 
 =head
