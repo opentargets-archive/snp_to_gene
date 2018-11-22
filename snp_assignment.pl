@@ -175,6 +175,18 @@ sub _GetVepData {
       		Time::HiRes::sleep($retry);
       		# after sleeping re-request
 		return _GetVepData($id);
+        } elsif($status == 429) {
+                Time::HiRes::sleep(1.0);
+                # after sleeping re-request
+                return _GetVepData($id);
+        } elsif($status == 504) {
+                Time::HiRes::sleep(1.0);
+                # after sleeping re-request
+                return _GetVepData($id);
+        } elsif($status == 503) {
+                Time::HiRes::sleep(1.0);
+                # after sleeping re-request
+                return _GetVepData($id);
  	} else {
 		my ($status, $reason) = ($response->{status}, $response->{reason});
 		return $response->{content} if(length $response->{content});
