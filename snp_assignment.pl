@@ -175,6 +175,21 @@ sub _GetVepData {
       		Time::HiRes::sleep($retry);
       		# after sleeping re-request
 		return _GetVepData($id);
+        } elsif($status == 429) {
+                # Wait random time between 1 and 10 seconds before retrying
+                Time::HiRes::sleep(1.0+rand(9));
+                # after sleeping re-request
+                return _GetVepData($id);
+        } elsif($status == 504) {
+                # Wait random time between 1 and 10 seconds before retrying
+                Time::HiRes::sleep(1.0+rand(9));
+                # after sleeping re-request
+                return _GetVepData($id);
+        } elsif($status == 503) {
+                # Wait random time between 1 and 10 seconds before retrying
+                Time::HiRes::sleep(1.0+rand(9)));
+                # after sleeping re-request
+                return _GetVepData($id);
  	} else {
 		my ($status, $reason) = ($response->{status}, $response->{reason});
 		return $response->{content} if(length $response->{content});
