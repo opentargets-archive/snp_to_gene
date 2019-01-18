@@ -187,7 +187,7 @@ sub _GetVepData {
                 return _GetVepData($id);
         } elsif($status == 503) {
                 # Wait random time between 1 and 10 seconds before retrying
-                Time::HiRes::sleep(1.0+rand(9)));
+                Time::HiRes::sleep(1.0+rand(9));
                 # after sleeping re-request
                 return _GetVepData($id);
  	} else {
