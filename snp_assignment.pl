@@ -172,24 +172,24 @@ sub _GetVepData {
         #  'Too Many Request, You have been rate-limited; wait and retry.'
 	if($status == 429 && exists $response->{headers}->{'retry-after'}) {
 		my $retry = $response->{headers}->{'retry-after'};
-      		Time::HiRes::sleep($retry);
-      		# after sleeping re-request
+      	Time::HiRes::sleep($retry);
+      	# after sleeping re-request
 		return _GetVepData($id);
-        } elsif($status == 429) {
-                # Wait random time between 1 and 10 seconds before retrying
-                Time::HiRes::sleep(1.0+rand(9));
-                # after sleeping re-request
-                return _GetVepData($id);
-        } elsif($status == 504) {
-                # Wait random time between 1 and 10 seconds before retrying
-                Time::HiRes::sleep(1.0+rand(9));
-                # after sleeping re-request
-                return _GetVepData($id);
-        } elsif($status == 503) {
-                # Wait random time between 1 and 10 seconds before retrying
-                Time::HiRes::sleep(1.0+rand(9));
-                # after sleeping re-request
-                return _GetVepData($id);
+    } elsif($status == 429) {
+        # Wait random time between 1 and 10 seconds before retrying
+        Time::HiRes::sleep(1.0+rand(9));
+        # after sleeping re-request
+        return _GetVepData($id);
+    } elsif($status == 504) {
+        # Wait random time between 1 and 10 seconds before retrying
+        Time::HiRes::sleep(1.0+rand(9));
+        # after sleeping re-request
+        return _GetVepData($id);
+    } elsif($status == 503) {
+        # Wait random time between 1 and 10 seconds before retrying
+        Time::HiRes::sleep(1.0+rand(9));
+        # after sleeping re-request
+        return _GetVepData($id);
  	}elsif($status == 500){
  	    # Wait random time between 1 and 10 seconds before retrying
         Time::HiRes::sleep(1.0+rand(9));
