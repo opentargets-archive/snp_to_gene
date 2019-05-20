@@ -190,7 +190,17 @@ sub _GetVepData {
                 Time::HiRes::sleep(1.0+rand(9));
                 # after sleeping re-request
                 return _GetVepData($id);
- 	} else {
+ 	}elsif($status == 500){
+ 	    # Wait random time between 1 and 10 seconds before retrying
+        Time::HiRes::sleep(1.0+rand(9));
+        # after sleeping re-request
+        return _GetVepData($id);
+ 	}elsif($status == 502){
+ 	    # Wait random time between 1 and 10 seconds before retrying
+        Time::HiRes::sleep(1.0+rand(9));
+        # after sleeping re-request
+        return _GetVepData($id);
+ 	}else {
 		my ($status, $reason) = ($response->{status}, $response->{reason});
 		return $response->{content} if(length $response->{content});
       	        #die "Failed for $id! Status code: ${status}. Reason: ${reason}\n";
