@@ -79,49 +79,49 @@ foreach my $id (@$ids){
    	my $json        = _GetVepData($id);
    	my $arr_of_hash = decode_json($json);
 	# e.g. rs876660862, rs869320723
-        print "$id\t$in_ensembl\tVEP Error, alleles look like an insertion\n" if(ref($arr_of_hash) ne 'ARRAY');
+    print "$id\t$in_ensembl\tVEP Error, alleles look like an insertion\n" if(ref($arr_of_hash) ne 'ARRAY');
 
-        next if(ref($arr_of_hash) ne 'ARRAY');
+    next if(ref($arr_of_hash) ne 'ARRAY');
 
    	foreach my $entry (@$arr_of_hash){
-      		my $most_severe_consequence = $entry->{most_severe_consequence};
-      		my $rs_id   = $entry->{id};
+   	    my $most_severe_consequence = $entry->{most_severe_consequence};
+      	my $rs_id   = $entry->{id};
 
 		# arr_of_hash
 		my $flag    = 0;
-      		my $tr_cons = $entry->{transcript_consequences};
+      	my $tr_cons = $entry->{transcript_consequences};
 
-      		foreach my $entry_2 (@$tr_cons) { 
-	 	   my $gene_id     = $entry_2->{gene_id};
-	 	   my $gene_symbol = $entry_2->{gene_symbol};
- 	 	   my $biotype     = $entry_2->{biotype};
-	 	   my @terms       = @{$entry_2->{consequence_terms}};
-	 	   my $terms       = join ",", @terms;
-		   my $distance    = 0;
-		   # obtain gene with 'most_severe_consequence'
-                   next unless ($biotype =~/protein_coding/ || $biotype =~/miRNA/);                                                
+      	foreach my $entry_2 (@$tr_cons) {
+	 	    my $gene_id     = $entry_2->{gene_id};
+	 	    my $gene_symbol = $entry_2->{gene_symbol};
+ 	 	    my $biotype     = $entry_2->{biotype};
+	 	    my @terms       = @{$entry_2->{consequence_terms}};
+	 	    my $terms       = join ",", @terms;
+		    my $distance    = 0;
+		    # obtain gene with 'most_severe_consequence'
+            next unless ($biotype =~/protein_coding/ || $biotype =~/miRNA/);
 
-	 	   if(grep(/$most_severe_consequence/, @terms)){
-			print "$id\t$in_ensembl\t$gene_id\t$gene_symbol\t$most_severe_consequence\t$distance\n";
-	 	   }
-		   $flag = 1 if($biotype =~/protein_coding/);
-     		}
+	 	    if(grep(/$most_severe_consequence/, @terms)){
+		        print "$id\t$in_ensembl\t$gene_id\t$gene_symbol\t$most_severe_consequence\t$distance\n";
+	 	    }
+		    $flag = 1 if($biotype =~/protein_coding/);
+     	}
 
-               # e.g rs869025300
-               # revisit snp assign to miRNA gene, 
-               # to get nearest protein_coding genes as well
-               if($most_severe_consequence=~/\?/ || $most_severe_consequence=~/intergenic_variant/ || $flag==0){
-               	   my $nearest_gene = _NearestGeneToSnp($rs_id);
+        # e.g rs869025300
+        # revisit snp assign to miRNA gene,
+        # to get nearest protein_coding genes as well
+        if($most_severe_consequence=~/\?/ || $most_severe_consequence=~/intergenic_variant/ || $flag==0){
+            my $nearest_gene = _NearestGeneToSnp($rs_id);
 
-                   if(scalar(@$nearest_gene) > 0){
-                   	my $gene_id      = @$nearest_gene[0]->{ensembl_gene_id};
-                        my $gene_symbol  = @$nearest_gene[0]->{external_name};
-                        my $consequence  = 'nearest_gene_five_prime_end';
-                        my $distance  = @$nearest_gene[0]->{distance};
+            if(scalar(@$nearest_gene) > 0){
+                my $gene_id      = @$nearest_gene[0]->{ensembl_gene_id};
+                my $gene_symbol  = @$nearest_gene[0]->{external_name};
+                my $consequence  = 'nearest_gene_five_prime_end';
+                my $distance  = @$nearest_gene[0]->{distance};
                         
-                        print "$id\t$in_ensembl\t$gene_id\t$gene_symbol\t$consequence\t$distance\n";
-                   } else { print "$id\t$in_ensembl\tNo nearest_gene_five_prime_end found!\n"; }
-               }   
+                print "$id\t$in_ensembl\t$gene_id\t$gene_symbol\t$consequence\t$distance\n";
+            } else { print "$id\t$in_ensembl\tNo nearest_gene_five_prime_end found!\n"; }
+        }
   	}    
   } 
   else { print "$id\t$in_ensembl\tVariant NOT found in Ensembl\n"; }
