@@ -2,15 +2,14 @@
 
 use strict;
 use warnings;
-use FileToList;
+#use FileToList;
 
 my $file          = $ARGV[0];
 #my $file_to_list  = FileToList->new($file);
-my $self = shift;
 my @ids;
 
-confess("File not readable!")if(! -r $self->{full_file_path});
-open (FILE, $self->{full_file_path}) or confess("Unable to open file: $!");
+confess("File not readable!")if(! -r $file);
+open (FILE, $file) or confess("Unable to open file: $!");
 
 while(<FILE>){
     # skipped NT expansion variants
