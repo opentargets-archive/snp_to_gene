@@ -2,7 +2,26 @@
 
 use strict;
 use warnings;
-#use FileToList;
+use Data::Dumper;
+use Bio::EnsEMBL::Registry;
+use HTTP::Tiny;
+use Time::HiRes;
+use JSON;
+use FileToList;
+use NearestGeneToSnp;
+
+my $registry = 'Bio::EnsEMBL::Registry';
+
+$registry->set_reconnect_when_lost(1);
+
+$registry->load_registry_from_db(
+    # alternatively 'useastdb.ensembl.org'
+    -host => 'ensembldb.ensembl.org',
+    -user => 'anonymous',
+);
+
+my $gene_adaptor = $registry->get_adaptor('human', 'core', 'gene' );
+my $var_adaptor  = $registry->get_adaptor('human', 'variation', 'variation');
 
 my $rsID = "rs550057";
 
