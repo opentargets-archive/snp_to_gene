@@ -23,6 +23,9 @@ $registry->load_registry_from_db(
 my $gene_adaptor = $registry->get_adaptor('human', 'core', 'gene' );
 my $var_adaptor  = $registry->get_adaptor('human', 'variation', 'variation');
 
+my $request_count = 0;
+my $last_request_time = Time::HiRes::time();
+
 my $rsID = "rs550057";
 
 my $in_ensembl = '1';
