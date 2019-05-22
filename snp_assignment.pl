@@ -195,6 +195,14 @@ sub _GetVepData {
             Time::HiRes::sleep(1.0+rand(9));
             # after sleeping re-request
             return _GetVepData($id);
+        } elsif($status == 400){
+            print STDERR "[$current_time_string] HTTP ERROR 400 calling VEP with $id\n";
+		    print STDERR "[STATUS] $response->{status}\n";
+		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[CONTENT] $response->{content} \n";
+
+            # No return needed here, the default ones outside the if will be used
+
         } elsif($status == 504) {
             print STDERR "[$current_time_string] HTTP ERROR 504 calling VEP with $id\n";
 		    print STDERR "[STATUS] $response->{status}\n";
