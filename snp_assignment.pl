@@ -167,43 +167,43 @@ sub _GetVepData {
     my $status = $response->{status};
 
     if(!$response->{success}){
-	# check for rate limit exceeded & retry-after 
+        # check for rate limit exceeded & retry-after
         #  HTTP Response code 429 =>
         #  'Too Many Request, You have been rate-limited; wait and retry.'
-	if($status == 429 && exists $response->{headers}->{'retry-after'}) {
-		my $retry = $response->{headers}->{'retry-after'};
-      	Time::HiRes::sleep($retry);
-      	# after sleeping re-request
-		return _GetVepData($id);
-    } elsif($status == 429) {
-        # Wait random time between 1 and 10 seconds before retrying
-        Time::HiRes::sleep(1.0+rand(9));
-        # after sleeping re-request
-        return _GetVepData($id);
-    } elsif($status == 504) {
-        # Wait random time between 1 and 10 seconds before retrying
-        Time::HiRes::sleep(1.0+rand(9));
-        # after sleeping re-request
-        return _GetVepData($id);
-    } elsif($status == 503) {
-        # Wait random time between 1 and 10 seconds before retrying
-        Time::HiRes::sleep(1.0+rand(9));
-        # after sleeping re-request
-        return _GetVepData($id);
- 	}elsif($status == 500){
- 	    # Wait random time between 1 and 10 seconds before retrying
-        Time::HiRes::sleep(1.0+rand(9));
-        # after sleeping re-request
-        return _GetVepData($id);
- 	}elsif($status == 502){
- 	    # Wait random time between 1 and 10 seconds before retrying
-        Time::HiRes::sleep(1.0+rand(9));
-        # after sleeping re-request
-        return _GetVepData($id);
- 	}else {
-		my ($status, $reason) = ($response->{status}, $response->{reason});
-		return $response->{content} if(length $response->{content});
-      	        #die "Failed for $id! Status code: ${status}. Reason: ${reason}\n";
+	    if($status == 429 && exists $response->{headers}->{'retry-after'}) {
+		    my $retry = $response->{headers}->{'retry-after'};
+      	    Time::HiRes::sleep($retry);
+      	    # after sleeping re-request
+		    return _GetVepData($id);
+        } elsif($status == 429) {
+            # Wait random time between 1 and 10 seconds before retrying
+            Time::HiRes::sleep(1.0+rand(9));
+            # after sleeping re-request
+            return _GetVepData($id);
+        } elsif($status == 504) {
+            # Wait random time between 1 and 10 seconds before retrying
+            Time::HiRes::sleep(1.0+rand(9));
+            # after sleeping re-request
+            return _GetVepData($id);
+        } elsif($status == 503) {
+            # Wait random time between 1 and 10 seconds before retrying
+            Time::HiRes::sleep(1.0+rand(9));
+            # after sleeping re-request
+            return _GetVepData($id);
+ 	    }elsif($status == 500){
+ 	        # Wait random time between 1 and 10 seconds before retrying
+            Time::HiRes::sleep(1.0+rand(9));
+            # after sleeping re-request
+            return _GetVepData($id);
+ 	    }elsif($status == 502){
+ 	        # Wait random time between 1 and 10 seconds before retrying
+            Time::HiRes::sleep(1.0+rand(9));
+            # after sleeping re-request
+            return _GetVepData($id);
+ 	    }else {
+		    my ($status, $reason) = ($response->{status}, $response->{reason});
+		    return $response->{content} if(length $response->{content});
+      	    #die "Failed for $id! Status code: ${status}. Reason: ${reason}\n";
         }
    }	
 	
