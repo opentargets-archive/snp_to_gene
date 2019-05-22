@@ -10,7 +10,7 @@ my $in_ensembl = '1';
 
 # check rs_id status
 if($rsID =~/^rs/){
-   my $var   = $var_adaptor->fetch_by_name($id);
+   my $var   = $var_adaptor->fetch_by_name($rsID);
      $in_ensembl = defined($var) ? 1 : 0;
 }
 
@@ -18,7 +18,7 @@ if($in_ensembl){
     my $json        = _GetVepData($rsID);
    	my $arr_of_hash = decode_json($json);
 	# e.g. rs876660862, rs869320723
-    print "$id\t$in_ensembl\tVEP Error, alleles look like an insertion\n" if(ref($arr_of_hash) ne 'ARRAY');
+    print "$rsID\t$in_ensembl\tVEP Error, alleles look like an insertion\n" if(ref($arr_of_hash) ne 'ARRAY');
 
     next if(ref($arr_of_hash) ne 'ARRAY');
 
@@ -41,7 +41,7 @@ if($in_ensembl){
             next unless ($biotype =~/protein_coding/ || $biotype =~/miRNA/);
 
 	 	    if(grep(/$most_severe_consequence/, @terms)){
-		        print "$id\t$in_ensembl\t$gene_id\t$gene_symbol\t$most_severe_consequence\t$distance\n";
+		        print "$rsID\t$in_ensembl\t$gene_id\t$gene_symbol\t$most_severe_consequence\t$distance\n";
 	 	    }
 		    $flag = 1 if($biotype =~/protein_coding/);
      	}
@@ -58,12 +58,12 @@ if($in_ensembl){
                 my $consequence  = 'nearest_gene_five_prime_end';
                 my $distance  = @$nearest_gene[0]->{distance};
 
-                print "$id\t$in_ensembl\t$gene_id\t$gene_symbol\t$consequence\t$distance\n";
-            } else { print "$id\t$in_ensembl\tNo nearest_gene_five_prime_end found!\n"; }
+                print "$rsID\t$in_ensembl\t$gene_id\t$gene_symbol\t$consequence\t$distance\n";
+            } else { print "$rsID\t$in_ensembl\tNo nearest_gene_five_prime_end found!\n"; }
         }
   	}
   }
-  else { print "$id\t$in_ensembl\tVariant NOT found in Ensembl\n"; }
+  else { print "$rsID\t$in_ensembl\tVariant NOT found in Ensembl\n"; }
 
 }
 
