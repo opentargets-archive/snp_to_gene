@@ -4,18 +4,18 @@ use strict;
 use warnings;
 #use FileToList;
 
-my $id = "rs550057";
+my $rsID = "rs550057";
 
 my $in_ensembl = '1';
 
 # check rs_id status
-if($id =~/^rs/){
+if($rsID =~/^rs/){
    my $var   = $var_adaptor->fetch_by_name($id);
      $in_ensembl = defined($var) ? 1 : 0;
 }
 
 if($in_ensembl){
-    my $json        = _GetVepData($id);
+    my $json        = _GetVepData($rsID);
    	my $arr_of_hash = decode_json($json);
 	# e.g. rs876660862, rs869320723
     print "$id\t$in_ensembl\tVEP Error, alleles look like an insertion\n" if(ref($arr_of_hash) ne 'ARRAY');
