@@ -87,8 +87,6 @@ if($in_ensembl){
   }
   else { print "$rsID\t$in_ensembl\tVariant NOT found in Ensembl\n"; }
 
-}
-
 
 sub _GetVepData {
     my ($id) = @_;
