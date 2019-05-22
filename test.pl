@@ -42,8 +42,6 @@ if($in_ensembl){
 	# e.g. rs876660862, rs869320723
     print "$rsID\t$in_ensembl\tVEP Error, alleles look like an insertion\n" if(ref($arr_of_hash) ne 'ARRAY');
 
-    next if(ref($arr_of_hash) ne 'ARRAY');
-
    	foreach my $entry (@$arr_of_hash){
    	    my $most_severe_consequence = $entry->{most_severe_consequence};
       	my $rs_id   = $entry->{id};
