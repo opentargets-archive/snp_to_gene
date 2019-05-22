@@ -171,7 +171,7 @@ sub _GetVepData {
         #  HTTP Response code 429 =>
         #  'Too Many Request, You have been rate-limited; wait and retry.'
 
-        $current_time_string = localtime();
+        my $current_time_string = localtime();
 
 	    if($status == 429 && exists $response->{headers}->{'retry-after'}) {
 		    print STDERR "[$current_time_string] HTTP ERROR 429 calling VEP with $id\n";
