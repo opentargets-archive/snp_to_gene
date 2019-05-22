@@ -79,9 +79,14 @@ foreach my $id (@$ids){
    	my $json        = _GetVepData($id);
    	my $arr_of_hash = decode_json($json);
 	# e.g. rs876660862, rs869320723
-    print "$id\t$in_ensembl\tVEP Error, alleles look like an insertion\n" if(ref($arr_of_hash) ne 'ARRAY');
-
-    next if(ref($arr_of_hash) ne 'ARRAY');
+    if(ref($arr_of_hash) ne 'ARRAY'){
+        if($arr_of_hash->{error}){
+            print "$id\t$in_ensembl\t$arr_of_hash->{error}\n";
+        }else{
+            print "$id\t$in_ensembl\tVEP Error, alleles look like an insertion\n" ;
+        }
+        next;
+    }
 
    	foreach my $entry (@$arr_of_hash){
    	    my $most_severe_consequence = $entry->{most_severe_consequence};
