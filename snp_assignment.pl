@@ -240,7 +240,7 @@ sub _GetVepData {
             # after sleeping re-request
             return _GetVepData($id);
  	    }else {
-		    print STDERR "[$current_time_string] HTTP ERROR 429 calling VEP with $id\n";
+		    print STDERR "[$current_time_string] HTTP ERROR calling VEP with $id\n";
 		    print STDERR "[STATUS] $response->{status}\n";
 		    print STDERR "[REASON] $response->{reason})\n";
 		    print STDERR "[CONTENT] $response->{content} \n";
