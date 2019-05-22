@@ -246,8 +246,13 @@ sub _GetVepData {
 		    print STDERR "[CONTENT] $response->{content} \n";
 		    print STDERR "*** RETRYING ***\n\n";
 
-		    my ($status, $reason) = ($response->{status}, $response->{reason});
-		    return $response->{content} if(length $response->{content});
+ 	        # Wait random time between 1 and 10 seconds before retrying
+            Time::HiRes::sleep(1.0+rand(9));
+            # after sleeping re-request
+            return _GetVepData($id);
+
+		    #my ($status, $reason) = ($response->{status}, $response->{reason});
+		    #return $response->{content} if(length $response->{content});
       	    #die "Failed for $id! Status code: ${status}. Reason: ${reason}\n";
         }
    }	
