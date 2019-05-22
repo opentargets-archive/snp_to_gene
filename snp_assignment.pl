@@ -170,37 +170,82 @@ sub _GetVepData {
         # check for rate limit exceeded & retry-after
         #  HTTP Response code 429 =>
         #  'Too Many Request, You have been rate-limited; wait and retry.'
+
+        $current_time_string = localtime();
+
 	    if($status == 429 && exists $response->{headers}->{'retry-after'}) {
+		    print STDERR "[$current_time_string] HTTP ERROR 429 calling VEP with $id\n";
+		    print STDERR "[STATUS] $response->{status}\n";
+		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[CONTENT] $response->{content} \n";
+		    print STDERR "*** RETRYING ***\n\n";
+
 		    my $retry = $response->{headers}->{'retry-after'};
       	    Time::HiRes::sleep($retry);
       	    # after sleeping re-request
 		    return _GetVepData($id);
         } elsif($status == 429) {
+            print STDERR "[$current_time_string] HTTP ERROR 429 calling VEP with $id\n";
+		    print STDERR "[STATUS] $response->{status}\n";
+		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[CONTENT] $response->{content} \n";
+		    print STDERR "*** RETRYING ***\n\n";
+
             # Wait random time between 1 and 10 seconds before retrying
             Time::HiRes::sleep(1.0+rand(9));
             # after sleeping re-request
             return _GetVepData($id);
         } elsif($status == 504) {
+            print STDERR "[$current_time_string] HTTP ERROR 504 calling VEP with $id\n";
+		    print STDERR "[STATUS] $response->{status}\n";
+		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[CONTENT] $response->{content} \n";
+		    print STDERR "*** RETRYING ***\n\n";
+
             # Wait random time between 1 and 10 seconds before retrying
             Time::HiRes::sleep(1.0+rand(9));
             # after sleeping re-request
             return _GetVepData($id);
         } elsif($status == 503) {
+            print STDERR "[$current_time_string] HTTP ERROR 503 calling VEP with $id\n";
+		    print STDERR "[STATUS] $response->{status}\n";
+		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[CONTENT] $response->{content} \n";
+		    print STDERR "*** RETRYING ***\n\n";
+
             # Wait random time between 1 and 10 seconds before retrying
             Time::HiRes::sleep(1.0+rand(9));
             # after sleeping re-request
             return _GetVepData($id);
  	    }elsif($status == 500){
+ 	        print STDERR "[$current_time_string] HTTP ERROR 500 calling VEP with $id\n";
+		    print STDERR "[STATUS] $response->{status}\n";
+		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[CONTENT] $response->{content} \n";
+		    print STDERR "*** RETRYING ***\n\n";
+
  	        # Wait random time between 1 and 10 seconds before retrying
             Time::HiRes::sleep(1.0+rand(9));
             # after sleeping re-request
             return _GetVepData($id);
  	    }elsif($status == 502){
+ 	        print STDERR "[$current_time_string] HTTP ERROR 502 calling VEP with $id\n";
+		    print STDERR "[STATUS] $response->{status}\n";
+		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[CONTENT] $response->{content} \n";
+		    print STDERR "*** RETRYING ***\n\n";
+
  	        # Wait random time between 1 and 10 seconds before retrying
             Time::HiRes::sleep(1.0+rand(9));
             # after sleeping re-request
             return _GetVepData($id);
  	    }else {
+		    print STDERR "[$current_time_string] HTTP ERROR 429 calling VEP with $id\n";
+		    print STDERR "[STATUS] $response->{status}\n";
+		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[CONTENT] $response->{content} \n";
+		    print STDERR "*** RETRYING ***\n\n";
+
 		    my ($status, $reason) = ($response->{status}, $response->{reason});
 		    return $response->{content} if(length $response->{content});
       	    #die "Failed for $id! Status code: ${status}. Reason: ${reason}\n";
