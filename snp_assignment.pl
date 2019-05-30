@@ -81,9 +81,9 @@ foreach my $id (@$ids){
 	# e.g. rs876660862, rs869320723
     if(ref($arr_of_hash) ne 'ARRAY'){
         if($arr_of_hash->{error}){
-            print "$id\t$in_ensembl\t$arr_of_hash->{error}\n";
+            print "$id\t$in_ensembl\tNA\tNA\t[VEP ERROR] $arr_of_hash->{error}\tNA\n";
         }else{
-            print "$id\t$in_ensembl\tVEP Error, alleles look like an insertion\n" ;
+            print "$id\t$in_ensembl\tNA\tNA\t[VEP Error] Alleles look like an insertion\tNA\n" ;
         }
         next;
     }
