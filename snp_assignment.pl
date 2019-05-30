@@ -30,9 +30,14 @@
 
 =pod
   
-=head1 AUTHOR/MAINTAINER
+=head1 AUTHOR
 
 ckong@ebi.ac.uk
+
+=head1 MAINTAINERS
+
+gonzaleza@ebi.ac.uk
+faulcon@ebi.ac.uk
 
 =cut
 use strict;
