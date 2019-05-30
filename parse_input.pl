@@ -32,13 +32,13 @@ while(<FILE>){
     my ($chr, $start, $end, $ref, $alt, $strand, $sv_type, $rs_id, $rcv_id, $ncbi_gene_id, $nsv_id, $misc) = split /\s+/, $_;
 
     if($rs_id =~/^rs/ and !exists($ids{$rs_id})){
-	    $ids{rs_id} = 1;
+	    $ids{$rs_id} = 1;
     }elsif($rs_id =~/\-1/){
         my $str = '1';
         $str    = '-1' if($strand =~/\-/);
         my $coord = $chr.":".$start."-".$end.":".$str."/".$alt;
         if(!exists($ids{coord})){
-            $ids{coord} = 1;
+            $ids{$coord} = 1;
         }
       }
 }
