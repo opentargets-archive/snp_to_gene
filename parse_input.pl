@@ -37,7 +37,7 @@ while(<FILE>){
         my $str = '1';
         $str    = '-1' if($strand =~/\-/);
         my $coord = $chr.":".$start."-".$end.":".$str."/".$alt;
-        if(!exists($ids{coord}){
+        if(!exists($ids{coord})){
             $ids{coord} = 1;
         }
       }
