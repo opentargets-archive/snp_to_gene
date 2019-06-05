@@ -29,7 +29,7 @@ while(<FILE>){
     # skipped NT expansion variants
     next if($_=~/NT expansion/);
     chomp $_;
-    my ($chr, $start, $end, $ref, $alt, $strand, $sv_type, $rs_id, $rcv_id, $ncbi_gene_id, $nsv_id, $misc) = split /\s+/, $_;
+    my ($chr, $start, $end, $ref, $alt, $strand, $sv_type, $rs_id, $rcv_id, $ncbi_gene_id, $nsv_id, $misc) = split /\t/, $_;
 
     if($rs_id =~/^rs/ and !exists($ids{$rs_id})){
 	    $ids{$rs_id} = 1;
