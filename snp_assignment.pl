@@ -47,7 +47,6 @@ use Bio::EnsEMBL::Registry;
 use HTTP::Tiny;
 use Time::HiRes;
 use JSON;
-use FileToList;
 use NearestGeneToSnp;
 
 my $registry = 'Bio::EnsEMBL::Registry';
@@ -64,14 +63,16 @@ my $gene_adaptor = $registry->get_adaptor('human', 'core', 'gene' );
 my $var_adaptor  = $registry->get_adaptor('human', 'variation', 'variation');
 
 my $file          = $ARGV[0];
-my $file_to_list  = FileToList->new($file);
 my $request_count = 0;
 my $last_request_time = Time::HiRes::time();
 
-# ref to array 
-my $ids = $file_to_list->get_lines_as_list();
+# Read variants from file
+open (FILE, $file) or confess("Unable to open file: $!");
 
-foreach my $id (@$ids){ 
+while(my $id = <$FILE>){
+
+   chomp $id;
+
    my $in_ensembl = '1';
 
    # check rs_id status
