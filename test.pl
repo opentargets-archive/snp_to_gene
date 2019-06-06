@@ -18,5 +18,5 @@ if(scalar(@$nearest_gene) > 0){
                 my $consequence  = 'nearest_gene_five_prime_end';
                 my $distance  = @$nearest_gene[0]->{distance};
 
-                print "$id\t$in_ensembl\t$gene_id\t$gene_symbol\t$consequence\t$distance\n";
-} else { print "$id\t$in_ensembl\tNo nearest_gene_five_prime_end found!\n"; }
+                print "$rs_id\t1\t$gene_id\t$gene_symbol\t$consequence\t$distance\n";
+} else { print "$rs_id\t1\tNo nearest_gene_five_prime_end found!\n"; }
