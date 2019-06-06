@@ -67,9 +67,9 @@ my $request_count = 0;
 my $last_request_time = Time::HiRes::time();
 
 # Read variants from file
-open (FILE, $file) or confess("Unable to open file: $!");
+open (my $variant_file, $file) or confess("Unable to open file: $!");
 
-while(my $id = <$FILE>){
+while(my $id = <$variant_file>){
 
    chomp $id;
 
