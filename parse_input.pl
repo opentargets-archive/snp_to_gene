@@ -16,7 +16,6 @@ use strict;
 use warnings;
 use v5.10;
 use Carp qw(confess);
-package FileToList;
 
 my $file = $ARGV[0];
 
