@@ -22,7 +22,6 @@ my $file = $ARGV[0];
 
 my %ids;
 
-confess("File not readable!")if(! -r $file);
 open (FILE, $file) or confess("Unable to open file: $!");
 
 while(<FILE>){
