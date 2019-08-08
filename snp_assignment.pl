@@ -95,6 +95,9 @@ while(my $id = <$variant_file>){
     }
 
    	foreach my $entry (@$arr_of_hash){
+   	    # Only consider consequences in genes located in "standard" chromosomes (1-23, X, Y, MT)
+   	    next unless (sprintf("%s",$entry->{seq_region_name}) ~~ ["1", "2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y","MT"]);
+
    	    my $most_severe_consequence = $entry->{most_severe_consequence};
       	my $rs_id   = $entry->{id};
 
