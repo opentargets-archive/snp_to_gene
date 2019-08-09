@@ -30,9 +30,14 @@
 
 =pod
   
-=head1 AUTHOR/MAINTAINER
+=head1 AUTHOR
 
 ckong@ebi.ac.uk
+
+=head1 MAINTAINERS
+
+gonzaleza@ebi.ac.uk
+faulcon@ebi.ac.uk
 
 =cut
 use strict;
@@ -42,7 +47,6 @@ use Bio::EnsEMBL::Registry;
 use HTTP::Tiny;
 use Time::HiRes;
 use JSON;
-use FileToList;
 use NearestGeneToSnp;
 
 my $registry = 'Bio::EnsEMBL::Registry';
@@ -59,14 +63,16 @@ my $gene_adaptor = $registry->get_adaptor('human', 'core', 'gene' );
 my $var_adaptor  = $registry->get_adaptor('human', 'variation', 'variation');
 
 my $file          = $ARGV[0];
-my $file_to_list  = FileToList->new($file);
 my $request_count = 0;
 my $last_request_time = Time::HiRes::time();
 
-# ref to array 
-my $ids = $file_to_list->get_lines_as_list();
+# Read variants from file
+open (my $variant_file, $file) or confess("Unable to open file: $!");
 
-foreach my $id (@$ids){ 
+while(my $id = <$variant_file>){
+
+   chomp $id;
+
    my $in_ensembl = '1';
 
    # check rs_id status
@@ -89,6 +95,9 @@ foreach my $id (@$ids){
     }
 
    	foreach my $entry (@$arr_of_hash){
+   	    # Only consider consequences in genes located in "standard" chromosomes (1-22, X, Y, MT)
+   	    next unless (sprintf("%s",$entry->{seq_region_name}) ~~ ["1", "2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y","MT"]);
+
    	    my $most_severe_consequence = $entry->{most_severe_consequence};
       	my $rs_id   = $entry->{id};
 
