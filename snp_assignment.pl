@@ -87,9 +87,9 @@ while(my $id = <$variant_file>){
 	# e.g. rs876660862, rs869320723
     if(ref($arr_of_hash) ne 'ARRAY'){
         if($arr_of_hash->{error}){
-            print "$id\t$in_ensembl\tNA\tNA\t[VEP ERROR] $arr_of_hash->{error}\tNA\n";
+            print STDERR "$id\t$in_ensembl\tNA\tNA\t[VEP ERROR] $arr_of_hash->{error}\tNA\n";
         }else{
-            print "$id\t$in_ensembl\tNA\tNA\t[VEP Error] Alleles look like an insertion\tNA\n" ;
+            print STDERR "$id\t$in_ensembl\tNA\tNA\t[VEP Error] Alleles look like an insertion\tNA\n" ;
         }
         next;
     }
