@@ -220,6 +220,7 @@ sub _GetVepData {
 		    # e.g. "Cannot allocate memory"
 		    # Ensembl suggest to retry a few times to fix the temporary issues
 		    if($repeat_count < 3){
+		        print STDERR "*** RETRYING ***\n\n";
 		        $repeat_count++;
 		        return _GetVepData($id);
 		    }else{
