@@ -65,6 +65,7 @@ my $var_adaptor  = $registry->get_adaptor('human', 'variation', 'variation');
 my $file          = $ARGV[0];
 my $request_count = 0;
 my $last_request_time = Time::HiRes::time();
+my $repeat_count=1;
 
 # Read variants from file
 open (my $variant_file, $file) or confess("Unable to open file: $!");
@@ -210,10 +211,20 @@ sub _GetVepData {
             # after sleeping re-request
             return _GetVepData($id);
         } elsif($status == 400){
-            print STDERR "[$current_time_string] HTTP ERROR 400 calling VEP with $id\n";
+            print STDERR "[$current_time_string] HTTP ERROR 400 calling VEP with $id - ATTEMPT $repeat_count\n";
 		    print STDERR "[STATUS] $response->{status}\n";
 		    print STDERR "[REASON] $response->{reason})\n";
 		    print STDERR "[CONTENT] $response->{content} \n";
+
+		    # Sometimes the 400 error is returned even though and internal error has happened,
+		    # e.g. "Cannot allocate memory"
+		    # Ensembl suggest to retry a few times to fix the temporary issues
+		    if($repeat_count < 3){
+		        $repeat_count++;
+		        return _GetVepData($id);
+		    }else{
+		        $repeat_count=1;
+		    }
 
             # No return needed here, the default ones outside the if will be used
 
@@ -280,6 +291,7 @@ sub _GetVepData {
    }	
 	
   $request_count++;
+  $repeat_count=1;
   return $response->{content} if(length $response->{content});
 
 return;
