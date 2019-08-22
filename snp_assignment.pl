@@ -191,7 +191,7 @@ sub _GetVepData {
 	    if($status == 429 && exists $response->{headers}->{'retry-after'}) {
 		    print STDERR "[$current_time_string] HTTP ERROR 429 calling VEP with $id\n";
 		    print STDERR "[STATUS] $response->{status}\n";
-		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[REASON] $response->{reason}\n";
 		    print STDERR "[CONTENT] $response->{content} \n";
 		    print STDERR "*** RETRYING ***\n\n";
 
@@ -202,7 +202,7 @@ sub _GetVepData {
         } elsif($status == 429) {
             print STDERR "[$current_time_string] HTTP ERROR 429 calling VEP with $id\n";
 		    print STDERR "[STATUS] $response->{status}\n";
-		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[REASON] $response->{reason}\n";
 		    print STDERR "[CONTENT] $response->{content} \n";
 		    print STDERR "*** RETRYING ***\n\n";
 
@@ -213,7 +213,7 @@ sub _GetVepData {
         } elsif($status == 400){
             print STDERR "[$current_time_string] HTTP ERROR 400 calling VEP with $id - ATTEMPT $repeat_count\n";
 		    print STDERR "[STATUS] $response->{status}\n";
-		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[REASON] $response->{reason}\n";
 		    print STDERR "[CONTENT] $response->{content} \n";
 
 		    # Sometimes the 400 error is returned even though and internal error has happened,
@@ -232,7 +232,7 @@ sub _GetVepData {
         } elsif($status == 504) {
             print STDERR "[$current_time_string] HTTP ERROR 504 calling VEP with $id\n";
 		    print STDERR "[STATUS] $response->{status}\n";
-		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[REASON] $response->{reason}\n";
 		    print STDERR "[CONTENT] $response->{content} \n";
 		    print STDERR "*** RETRYING ***\n\n";
 
@@ -243,7 +243,7 @@ sub _GetVepData {
         } elsif($status == 503) {
             print STDERR "[$current_time_string] HTTP ERROR 503 calling VEP with $id\n";
 		    print STDERR "[STATUS] $response->{status}\n";
-		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[REASON] $response->{reason}\n";
 		    print STDERR "[CONTENT] $response->{content} \n";
 		    print STDERR "*** RETRYING ***\n\n";
 
@@ -254,7 +254,7 @@ sub _GetVepData {
  	    }elsif($status == 500){
  	        print STDERR "[$current_time_string] HTTP ERROR 500 calling VEP with $id\n";
 		    print STDERR "[STATUS] $response->{status}\n";
-		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[REASON] $response->{reason}\n";
 		    print STDERR "[CONTENT] $response->{content} \n";
 		    print STDERR "*** RETRYING ***\n\n";
 
@@ -265,7 +265,7 @@ sub _GetVepData {
  	    }elsif($status == 502){
  	        print STDERR "[$current_time_string] HTTP ERROR 502 calling VEP with $id\n";
 		    print STDERR "[STATUS] $response->{status}\n";
-		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[REASON] $response->{reason}\n";
 		    print STDERR "[CONTENT] $response->{content} \n";
 		    print STDERR "*** RETRYING ***\n\n";
 
@@ -276,7 +276,7 @@ sub _GetVepData {
  	    }else {
 		    print STDERR "[$current_time_string] HTTP ERROR calling VEP with $id\n";
 		    print STDERR "[STATUS] $response->{status}\n";
-		    print STDERR "[REASON] $response->{reason})\n";
+		    print STDERR "[REASON] $response->{reason}\n";
 		    print STDERR "[CONTENT] $response->{content} \n";
 		    print STDERR "*** RETRYING ***\n\n";
 
