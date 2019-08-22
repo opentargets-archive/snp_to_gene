@@ -221,6 +221,9 @@ sub _GetVepData {
 		    # Ensembl suggest to retry a few times to fix the temporary issues
 		    if($repeat_count < 3){
 		        print STDERR "*** RETRYING ***\n\n";
+		        # Wait random time between 1 and 10 seconds before retrying
+                Time::HiRes::sleep(1.0+rand(9));
+                # after sleeping re-request
 		        $repeat_count++;
 		        return _GetVepData($id);
 		    }else{
